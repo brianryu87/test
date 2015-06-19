@@ -1,0 +1,160 @@
+#!/usr/bin/python
+import sys
+
+
+
+
+
+
+class ED:
+
+
+
+
+    def __init__(self,seq1,seq2,match,mism,gap):
+        self.seq1 = seq1
+        self.seq2 = seq2
+        self.match = match
+        self.mism = mism
+        self.gap = gap
+
+    def make_matrix(self):
+        self.seq1 = '-' + self.seq1 #column
+        self.seq2 = '-' + self.seq2 #row
+        n = len(self.seq2) #row
+        m = len(self.seq1) #column
+
+
+        matrix = [[0 for j in range(m)] for i in range(n)]
+        matrix2 = [[0 for j in range(m)] for i in range(n)]
+
+        for i in range(0, n):
+            matrix[i][0] = i * self.gap
+            matrix2[i][0] = i * self.gap
+        for j in range(0, m):
+            matrix[0][j] = j * self.gap
+            matrix2[0][j] = j * self.gap
+
+
+
+        self.matrix = matrix
+
+        self.matrix2 = matrix2
+
+
+
+        return self.matrix, self.matrix2, self.seq1, self.seq2
+
+    def fill_matrix(self):
+        n = len(self.seq2) #row
+        m = len(self.seq1) #column
+        for i in range(1, n):
+            for j in range(1, m):
+                m_mm = self.matrix[i-1][j-1]
+                if self.seq2[i] != self.seq1[j]:
+                    m_mm += self.mism
+                else:
+                    m_mm += self.match
+                horizontal = self.matrix[i-1][j] + self.gap
+                vertical = self.matrix[i][j-1] + self.gap
+
+                self.matrix[i][j] = max([m_mm, horizontal, vertical])
+                if self.matrix[i][j] == m_mm:
+                    self.matrix2[i][j] = 0
+                elif self.matrix[i][j] == horizontal:
+                    self.matrix2[i][j] = 1
+                elif self.matrix[i][j] == vertical:
+                    self.matrix2[i][j] = 2
+
+
+        return self.matrix, self.matrix2
+
+    def tracebacking(self):
+
+
+        alig1 = ''
+        alig2 = ''
+
+        j = len(self.seq1)-1
+        i = len(self.seq2)-1
+
+        alig1 += self.seq1[j]
+        alig2 += self.seq2[i]
+
+        score = 0
+
+
+
+
+        while i>0 or j > 0:
+            pos = self.matrix2[i][j]
+            if pos == 0:
+                alig1 += self.seq1[j]
+                alig2 += self.seq2[i]
+                i -= 1
+                j -= 1
+            elif pos == 1:
+                alig1 += '-'
+                alig2 += self.seq2[i]
+                i -= 1
+            elif pos == 2:
+                alig1 += self.seq1[j]
+                alig2 += '-'
+                j -= 1
+
+
+
+
+        alig1 = alig1[::-1]
+        alig2 = alig2[::-1]
+
+        alig1 = alig1[0:-1]
+        alig2 = alig2[0:-1]
+
+
+
+
+        for i in range(0, len(alig1)):
+            if alig1[i] == alig2[i]:
+                score += self.match
+            elif alig1[i] == '-' or alig2[i] == '-':
+                score += self.gap
+            else:
+                score += self.mism
+
+
+
+
+        self.alig1 = alig1
+        self.alig2 = alig2
+        self.score = score
+
+
+        return self.alig1, self.alig2, self.score
+
+
+
+    def printing_result(self):
+        print
+        print "***Brian & Kyuwon's Sequence Alignment***"
+        print "Optimal alignment score: " + str(self.score) + '\n'
+        print "Alignment 1: \n\n" + self.alig1 + '\n\n'
+        print "Alignment 2: \n\n" + self.alig2
+        print "*****************************************"
+
+
+
+
+
+seq1 = raw_input("Enter the first sequence : ")
+seq2 = raw_input("Enter the second sequence : ")
+match = int(raw_input("Enter the match score : "))
+mism = int(raw_input("Enter the mismatch score : "))
+gap = int(raw_input("Enter the gap penalty score : "))
+
+example = ED(seq1,seq2,match,mism,gap)
+
+example.make_matrix()
+example.fill_matrix()
+example.tracebacking()
+example.printing_result()

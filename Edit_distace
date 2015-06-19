@@ -69,7 +69,7 @@ class ED:
 
     def tracebacking(self):
 
-        print "HI"
+
         alig1 = ''
         alig2 = ''
 
@@ -81,6 +81,10 @@ class ED:
 
         score = 0
 
+
+        print alig1
+        print alig2
+        print "BYE"
 
         while i>0 or j > 0:
             pos = self.matrix2[i][j]
@@ -98,11 +102,18 @@ class ED:
                 alig2 += '-'
                 j -= 1
 
+        print alig1
+        print alig2
+        print "HI"
+
+
         alig1 = alig1[::-1]
         alig2 = alig2[::-1]
 
         alig1 = alig1[0:-1]
         alig2 = alig2[0:-1]
+
+
 
 
         for i in range(0, len(alig1)):

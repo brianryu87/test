@@ -36,11 +36,11 @@ class ED:
             matrix2[0][j] = j * self.gap
 
 
-        print "make_matrix"
+
         self.matrix = matrix
-        print self.matrix
+
         self.matrix2 = matrix2
-        print self.matrix2
+
 
 
         return self.matrix, self.matrix2, self.seq1, self.seq2
@@ -65,9 +65,7 @@ class ED:
                     self.matrix2[i][j] = 1
                 elif self.matrix[i][j] == vertical:
                     self.matrix2[i][j] = 2
-            print "fill_matrix"
-            print self.matrix
-            print self.matrix2
+
 
         return self.matrix, self.matrix2
 
@@ -86,9 +84,7 @@ class ED:
         score = 0
 
 
-        print alig1
-        print alig2
-        print "BYE"
+
 
         while i>0 or j > 0:
             pos = self.matrix2[i][j]
@@ -106,9 +102,7 @@ class ED:
                 alig2 += '-'
                 j -= 1
 
-        print alig1
-        print alig2
-        print "HI"
+
 
 
         alig1 = alig1[::-1]
@@ -128,25 +122,25 @@ class ED:
             else:
                 score += self.mism
 
-            print "tracebacking"
+
 
 
         self.alig1 = alig1
         self.alig2 = alig2
         self.score = score
-        print self.alig1
-        print self.score
+
 
         return self.alig1, self.alig2, self.score
 
 
 
     def printing_result(self):
-        print "***Brian's Sequence Alignment***"
+        print
+        print "***Brian & Kyuwon's Sequence Alignment***"
         print "Optimal alignment score: " + str(self.score) + '\n'
         print "Alignment 1: \n\n" + self.alig1 + '\n\n'
         print "Alignment 2: \n\n" + self.alig2
-        print "********************************"
+        print "*****************************************"
 
 
 
@@ -164,21 +158,3 @@ example.make_matrix()
 example.fill_matrix()
 example.tracebacking()
 example.printing_result()
-
-
-
-'''
-    def main(self):
-        seq1, seq2, match, mism, gap = read()
-        matrix, matrix2, seq1, seq2 = make_matrix(seq1, seq2, gap)
-        matrix, matrix2 = fill_matrix(seq1, seq2, matrix, matrix2, match, mism, gap)
-        alig1, alig2, score = tracebacking(seq1, seq2, matrix, matrix2, match, mism, gap)
-        print "***Brian's Sequence Alignment***"
-        print "Optimal alignment score: " + str(score) + '\n'
-        print "Alignment 1: \n\n" + alig1 + '\n\n'
-        print "Alignment 2: \n\n" + alig2
-        print "********************************"
-
-
-    main()
-'''

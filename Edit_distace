@@ -1,0 +1,114 @@
+#!/usr/bin/python
+import sys
+
+def read():
+    seq1 = sys.argv[1]
+    seq2 = sys.argv[2]
+    match = int(sys.argv[3])
+    mism = int(sys.argv[4])
+    gap = int(sys.argv[5])
+    print "read"
+
+    return seq1, seq2, match, mism, gap
+
+def make_matrix(seq1, seq2, gap):
+	seq1 = '-' + seq1 #column
+	seq2 = '-' + seq2 #row
+	n = len(seq2) #row
+	m = len(seq1) #column
+
+	
+	matrix = [[0 for j in range(m)] for i in range(n)]
+	matrix2 = [[0 for j in range(m)] for i in range(n)]
+	
+	for i in range(0, n):
+		matrix[i][0] = i * gap
+		matrix2[i][0] = i * gap
+	for j in range(0, m):
+		matrix[0][j] = j * gap
+		matrix2[0][j] = j * gap
+        print "make_matrix"
+
+	return matrix, matrix2, seq1, seq2
+
+def fill_matrix(seq1, seq2, matrix, matrix2, match, mism, gap):
+	n = len(seq2) #row
+	m = len(seq1) #column
+	for i in range(1, n):
+		for j in range(1, m):
+			m_mm = matrix[i-1][j-1]
+			if seq2[i] != seq1[j]:
+				m_mm += mism
+			else:
+				m_mm += match
+			horizontal = matrix[i-1][j] + gap
+			vertical = matrix[i][j-1] + gap
+			
+			matrix[i][j] = max([m_mm, horizontal, vertical])
+			if matrix[i][j] == m_mm:
+				matrix2[i][j] = 0
+			elif matrix[i][j] == horizontal:
+				matrix2[i][j] = 1
+			elif matrix[i][j] == vertical:
+				matrix2[i][j] = 2
+        print "fill_matrix"
+	return matrix, matrix2
+
+def tracebacking(seq1, seq2, matrix, matrix2, match, mism, gap):
+	alig1 = ''
+	alig2 = ''
+
+	j = len(seq1)-1
+	i = len(seq2)-1
+	
+	alig1 += seq1[j]
+	alig2 += seq2[i]
+	
+	score = 0
+	
+	while i>0 or j > 0:	
+		pos = matrix2[i][j]
+		if pos == 0:
+			alig1 += seq1[j]
+			alig2 += seq2[i]
+			i -= 1
+			j -= 1
+		elif pos == 1:
+			alig1 += '-'
+			alig2 += seq2[i]
+			i -= 1
+		elif pos == 2:
+			alig1 += seq1[j]
+			alig2 += '-'
+			j -= 1
+	
+	alig1 = alig1[::-1]
+	alig2 = alig2[::-1]
+
+	alig1 = alig1[0:-1]
+	alig2 = alig2[0:-1]
+	
+	for i in range(0, len(alig1)):
+		if alig1[i] == alig2[i]:
+			score += match
+		elif alig1[i] == '-' or alig2[i] == '-':
+			score += gap
+		else:
+			score += mism
+		
+        print "tracebacking"
+	return alig1, alig2, score
+
+def main():
+	seq1, seq2, match, mism, gap = read()
+	matrix, matrix2, seq1, seq2 = make_matrix(seq1, seq2, gap)
+	matrix, matrix2 = fill_matrix(seq1, seq2, matrix, matrix2, match, mism, gap)
+	alig1, alig2, score = tracebacking(seq1, seq2, matrix, matrix2, match, mism, gap)
+	print "***Brian's Sequence Alignment***"
+	print "Optimal alignment score: " + str(score) + '\n'
+	print "Alignment 1: \n\n" + alig1 + '\n\n'
+	print "Alignment 2: \n\n" + alig2
+	print "********************************"
+
+
+main()

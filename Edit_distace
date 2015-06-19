@@ -34,10 +34,13 @@ class ED:
         for j in range(0, m):
             matrix[0][j] = j * self.gap
             matrix2[0][j] = j * self.gap
-            print "make_matrix"
 
+
+        print "make_matrix"
         self.matrix = matrix
+        print self.matrix
         self.matrix2 = matrix2
+        print self.matrix2
 
 
         return self.matrix, self.matrix2, self.seq1, self.seq2
@@ -64,6 +67,7 @@ class ED:
                     self.matrix2[i][j] = 2
             print "fill_matrix"
             print self.matrix
+            print self.matrix2
 
         return self.matrix, self.matrix2
 

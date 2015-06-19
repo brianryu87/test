@@ -1,9 +1,7 @@
 #!/usr/bin/python
 import sys
 
-
-
-
+##This Program gets two input sequences from the user. Using the sequence, matrices are initialized and filled. After the matrices are filled, the second matrix is used as a trace back tool. 
 
 
 class ED:
@@ -17,7 +15,8 @@ class ED:
         self.match = match
         self.mism = mism
         self.gap = gap
-
+	
+	#Initialize matrix using length of seq1 and seq2. Fill the first row and column of the matrix with gap penalty.
     def make_matrix(self):
         self.seq1 = '-' + self.seq1 #column
         self.seq2 = '-' + self.seq2 #row
@@ -44,7 +43,8 @@ class ED:
 
 
         return self.matrix, self.matrix2, self.seq1, self.seq2
-
+	
+	#Fill matrix, column-wise. Assign match/mismatch score of the previous cell into m_mm and if sequence matches, add match score to m_mm. Vice versa. Then compare m_mm score with scores to the left and above. Choose the largest number and assign the number into the current cell. If max number was from above, mark the second matrix with 2; if from the left, mark the second matrix with 1; if from topleft, mark the second matrix with 0.
     def fill_matrix(self):
         n = len(self.seq2) #row
         m = len(self.seq1) #column
@@ -69,6 +69,7 @@ class ED:
 
         return self.matrix, self.matrix2
 
+	#Using numbers filled in the second matrix, create alignment score. Start with the bottom right cell. If the number is 0, add the corresponding nucleotide of the matrix to each alignment sequences. If the number is 1, add a dash to indicate that there is a gap to one of the sequences. If the number is 2, add a dash to the other sequence. Calculate alignment score. 
     def tracebacking(self):
 
 
@@ -133,7 +134,7 @@ class ED:
         return self.alig1, self.alig2, self.score
 
 
-
+	#Print alignment score, aligned sequence 1 and 2
     def printing_result(self):
         print
         print "***Brian & Kyuwon's Sequence Alignment***"
@@ -144,13 +145,13 @@ class ED:
 
 
 
+#Input sequence1, 2, match score, mismatch score, and gap penalty.
 
-
-seq1 = "GCTATGCGTAGCATCG"
-seq2 = "GCAATGCTGGCATCG"
-match = 2
-mism = 0
-gap = -1
+seq1 = raw_input("Enter the first sequence : ")
+seq2 = raw_input("Enter the second sequence : ")
+match = int(raw_input("Enter the match score : "))
+mism = int(raw_input("Enter the mismatch score : "))
+gap = int(raw_input("Enter the gap penalty score : "))
 
 example = ED(seq1,seq2,match,mism,gap)
 
